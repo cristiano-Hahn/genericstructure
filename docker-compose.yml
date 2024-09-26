@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    container_name: generic_structure_postgres
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: generic_structure_user
+      POSTGRES_PASSWORD: generic_structure_password
+      POSTGRES_DB: generic_structure_db
+    volumes:
+      - ./.volumes/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U generic_structure_user" ]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+

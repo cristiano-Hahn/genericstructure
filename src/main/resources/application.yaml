@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: genericstructure
+  r2dbc:
+    name: generic_structure_db
+    url: r2dbc:postgresql://localhost:5432/generic_structure_db
+    username: generic_structure_user
+    password: generic_structure_password
+    properties:
+      preparedStatementCacheQueries: 0
+
