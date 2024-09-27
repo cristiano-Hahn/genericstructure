@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class GenericstructureApplication
 
 fun main(args: Array<String>) {
-	runApplication<GenericstructureApplication>(*args)
+    runApplication<GenericstructureApplication>(*args)
 }

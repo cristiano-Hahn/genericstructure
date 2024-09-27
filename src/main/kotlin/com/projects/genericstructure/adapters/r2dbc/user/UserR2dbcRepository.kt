@@ -8,8 +8,7 @@ import io.r2dbc.spi.Row
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.awaitOneOrNull
 import org.springframework.stereotype.Service
-import java.util.*
-
+import java.util.UUID
 
 @Service
 class UserR2dbcRepository(
@@ -23,11 +22,9 @@ class UserR2dbcRepository(
             .map { row, _ -> row.toUser() }
             .awaitOneOrNull()
 
-
     private fun Row.toUser() = User(
         id = this.get<UUID>("id"),
         email = this.get<String>("email"),
         password = this.get<String>("password")
     )
-
 }

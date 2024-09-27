@@ -1,7 +1,7 @@
 package com.projects.genericstructure.adapters.r2dbc
 
 import com.projects.genericstructure.core.domain.User
-import java.util.*
+import java.util.UUID
 
 object UserR2dbcRepositoryIntegrationTestFixture {
 

@@ -35,5 +35,4 @@ class UserR2dbcRepositoryIntegrationTest : DescribeSpec({
             userRepository.findByEmail(USER_INVALID_EMAIL) shouldBe null
         }
     }
-
 })
