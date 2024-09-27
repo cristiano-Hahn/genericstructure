@@ -9,6 +9,13 @@ plugins {
 group = "com.projects"
 version = "0.0.1-SNAPSHOT"
 
+val kotestConsoleJvmVersion = "4.1.3.2"
+val kotestVersion = "5.5.5"
+val kotestSpringVersion = "4.4.3"
+val kotestExtensionsSpringVersion = "1.1.2"
+val mockkVersion = "1.13.11"
+val springMockkVersion = "3.1.1"
+
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
@@ -42,7 +49,18 @@ dependencies {
 	implementation("org.springframework:spring-jdbc")
 	runtimeOnly("org.postgresql:postgresql")
 	implementation("io.r2dbc:r2dbc-pool")
-	runtimeOnly("org.postgresql:r2dbc-postgresql")
+	implementation("org.postgresql:r2dbc-postgresql")
+
+	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
+	testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
+	testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
+	testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestExtensionsSpringVersion")
+	testImplementation("io.kotest:kotest-runner-console-jvm:$kotestConsoleJvmVersion") {
+		exclude("com.github.ajalt")
+	}
+	testImplementation("io.mockk:mockk:$mockkVersion")
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-debug")
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

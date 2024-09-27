@@ -7,7 +7,7 @@ object UserR2dbcSqlQueries {
             id, 
             email, 
             password 
-        from user
+        from "user"
         where email = :email
     """.trimIndent()
 }
