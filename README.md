@@ -8,7 +8,7 @@ A small and simple generic structure made with spring boot and postgresql that c
 ## 💼 Features
 - Dependencies configured with Docker compose
 - Postgresql connection with r2dbc driver
-- Basic auth with Spring security
+- Basic auth with Spring security for users and roles
 - Database migration structure with flyway
 - Test structure configured with kotest and mockk
 

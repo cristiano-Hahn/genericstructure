@@ -25,6 +25,8 @@ class UserR2dbcRepository(
     private fun Row.toUser() = User(
         id = this.get<UUID>("id"),
         email = this.get<String>("email"),
-        password = this.get<String>("password")
+        password = this.get<String>("password"),
+        enabled = this.get<Boolean>("enabled"),
+        roles = this.get<Array<String>>("roles").toList()
     )
 }

@@ -6,7 +6,9 @@ object UserR2dbcSqlQueries {
         select 
             id, 
             email, 
-            password 
+            password,
+            enabled,
+            roles
         from "user"
         where email = :email
     """.trimIndent()
