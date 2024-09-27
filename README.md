@@ -1,5 +1,5 @@
 # Generic structure
-A small and simple generic structure made with spring boot and postgresql that can be used for create other projects! ☕
+A small and simple generic structure made with spring boot and postgresql that can be used as base to create other projects! ☕
 
 ## 💻 Requirements
 -  Docker compose
