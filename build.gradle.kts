@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.projects"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 
 val kotestConsoleJvmVersion = "4.1.3.2"
 val kotestVersion = "5.5.5"
