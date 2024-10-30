@@ -1,4 +1,4 @@
-package com.projects.genericstructure.core.domain
+package com.projects.genericstructure.core.domain.user
 
 import java.util.UUID
 
@@ -7,5 +7,5 @@ data class User(
     val email: String,
     val password: String,
     val enabled: Boolean,
-    val roles: List<String>
+    val roles: List<Role>
 )

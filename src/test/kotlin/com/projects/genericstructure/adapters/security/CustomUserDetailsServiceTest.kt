@@ -3,7 +3,7 @@ package com.projects.genericstructure.adapters.security
 import com.projects.genericstructure.adapters.security.CustomUserDetailsServiceTestFixture.USER_EMAIL
 import com.projects.genericstructure.adapters.security.CustomUserDetailsServiceTestFixture.expectedUserDetailsUser
 import com.projects.genericstructure.adapters.security.CustomUserDetailsServiceTestFixture.user
-import com.projects.genericstructure.core.domain.UserRepository
+import com.projects.genericstructure.core.domain.user.UserRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

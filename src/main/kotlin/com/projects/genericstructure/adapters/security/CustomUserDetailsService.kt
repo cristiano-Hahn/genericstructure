@@ -1,6 +1,6 @@
 package com.projects.genericstructure.adapters.security
 
-import com.projects.genericstructure.core.domain.UserRepository
+import com.projects.genericstructure.core.domain.user.UserRepository
 import kotlinx.coroutines.runBlocking
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -27,7 +27,7 @@ class CustomUserDetailsService(
             .withUsername(username)
             .password(user.password)
             .disabled(!user.enabled)
-            .roles(*user.roles.toTypedArray())
+            .roles(*user.roles.map { it.name }.toTypedArray())
             .build()
     }
 }

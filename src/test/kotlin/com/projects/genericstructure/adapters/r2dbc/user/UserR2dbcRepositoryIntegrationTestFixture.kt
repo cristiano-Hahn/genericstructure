@@ -1,6 +1,7 @@
-package com.projects.genericstructure.adapters.r2dbc
+package com.projects.genericstructure.adapters.r2dbc.user
 
-import com.projects.genericstructure.core.domain.User
+import com.projects.genericstructure.core.domain.user.Role
+import com.projects.genericstructure.core.domain.user.User
 import java.util.UUID
 
 object UserR2dbcRepositoryIntegrationTestFixture {
@@ -23,6 +24,6 @@ object UserR2dbcRepositoryIntegrationTestFixture {
         email = USER_EMAIL,
         password = "123",
         enabled = true,
-        roles = listOf("USER")
+        roles = listOf(Role.USER)
     )
 }
