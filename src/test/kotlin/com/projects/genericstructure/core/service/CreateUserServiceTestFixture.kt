@@ -2,6 +2,7 @@ package com.projects.genericstructure.core.service
 
 import com.projects.genericstructure.core.domain.user.Role
 import com.projects.genericstructure.core.domain.user.User
+import com.projects.genericstructure.core.service.user.CreateUserCommand
 import java.util.UUID
 
 object CreateUserServiceTestFixture {

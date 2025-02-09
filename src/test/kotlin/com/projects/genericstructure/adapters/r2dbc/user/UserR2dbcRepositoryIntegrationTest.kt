@@ -6,6 +6,7 @@ import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryInte
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.expectedUser
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.sqlMockUser
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.sqlUnmockUser
+import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.userUpdated
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.r2dbc.core.await
@@ -41,6 +42,16 @@ class UserR2dbcRepositoryIntegrationTest : DescribeSpec({
             userRepository.findByEmail(expectedUser().email) shouldBe null
             userRepository.create(expectedUser())
             userRepository.findByEmail(expectedUser().email) shouldBe expectedUser()
+        }
+    }
+
+    describe("Update user") {
+        it("Should update a user") {
+            db.sql(sqlMockUser()).await()
+
+            val userUpdated = userUpdated()
+            userRepository.update(userUpdated.id, userUpdated)
+            userRepository.findByEmail(userUpdated.email) shouldBe userUpdated
         }
     }
 })

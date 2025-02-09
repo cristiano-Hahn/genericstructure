@@ -1,4 +1,4 @@
-package com.projects.genericstructure.core.service
+package com.projects.genericstructure.core.service.user
 
 import java.util.UUID
 

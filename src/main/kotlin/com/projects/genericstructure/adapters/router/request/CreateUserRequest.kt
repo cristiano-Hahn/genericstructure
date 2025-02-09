@@ -1,6 +1,6 @@
 package com.projects.genericstructure.adapters.router.request
 
-import com.projects.genericstructure.core.service.CreateUserCommand
+import com.projects.genericstructure.core.service.user.CreateUserCommand
 import java.util.UUID
 
 data class CreateUserRequest(

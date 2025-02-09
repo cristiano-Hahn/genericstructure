@@ -1,4 +1,4 @@
-package com.projects.genericstructure.core.service
+package com.projects.genericstructure.core.service.user
 
 import com.projects.genericstructure.core.domain.user.Role
 import com.projects.genericstructure.core.domain.user.User
@@ -8,19 +8,19 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class CreateUserService(
+class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder
 ) {
 
-    suspend fun execute(command: CreateUserCommand): User {
+    suspend fun create(command: CreateUserCommand): User {
         validateUserEmailAlreadyExists(command.email)
 
         val user = User(
             id = command.id,
             email = command.email,
             password = passwordEncoder.encode(command.password),
-            enabled = true,
+            enabled = false,
             roles = listOf(Role.USER)
         )
 

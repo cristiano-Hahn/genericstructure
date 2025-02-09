@@ -4,7 +4,7 @@ import com.projects.genericstructure.adapters.router.request.CreateUserRequest
 import com.projects.genericstructure.adapters.router.request.CreateUserResponse
 import com.projects.genericstructure.adapters.router.request.toCommand
 import com.projects.genericstructure.adapters.router.request.toCreateUserResponse
-import com.projects.genericstructure.core.service.CreateUserService
+import com.projects.genericstructure.core.service.user.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -16,14 +16,14 @@ import java.util.UUID
 @RestController()
 @RequestMapping("/users")
 class UserController(
-    private val createUserService: CreateUserService,
+    private val createUserService: UserService,
 ) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     suspend fun createUser(@RequestBody request: CreateUserRequest): CreateUserResponse {
         val userId = UUID.randomUUID()
-        val user = createUserService.execute(request.toCommand(userId))
+        val user = createUserService.create(request.toCommand(userId))
         return user.toCreateUserResponse()
     }
 }

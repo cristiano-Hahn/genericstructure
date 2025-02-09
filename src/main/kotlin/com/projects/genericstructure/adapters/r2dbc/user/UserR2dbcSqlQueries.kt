@@ -17,4 +17,9 @@ object UserR2dbcSqlQueries {
         INSERT INTO "user" (id, email, password, roles, enabled)
         VALUES (:id, :email, :password, :roles, :enabled);
     """.trimIndent()
+
+    fun updateUser() = """
+        UPDATE "user" SET email = :email, password = :password, roles = :roles, enabled = :enabled
+        WHERE id = :id;
+    """.trimIndent()
 }

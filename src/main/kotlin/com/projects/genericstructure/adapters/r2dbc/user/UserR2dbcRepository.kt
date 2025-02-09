@@ -3,6 +3,7 @@ package com.projects.genericstructure.adapters.r2dbc.user
 import com.projects.genericstructure.adapters.r2dbc.get
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcSqlQueries.createUser
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcSqlQueries.findUserByEmail
+import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcSqlQueries.updateUser
 import com.projects.genericstructure.core.domain.user.Role
 import com.projects.genericstructure.core.domain.user.User
 import com.projects.genericstructure.core.domain.user.UserRepository
@@ -27,6 +28,16 @@ class UserR2dbcRepository(
 
     override suspend fun create(user: User) {
         db.sql(createUser())
+            .bind("id", user.id)
+            .bind("email", user.email)
+            .bind("password", user.password)
+            .bind("enabled", user.enabled)
+            .bind("roles", user.roles.map { it.name }.toTypedArray())
+            .await()
+    }
+
+    override suspend fun update(userId: UUID, user: User) {
+        db.sql(updateUser())
             .bind("id", user.id)
             .bind("email", user.email)
             .bind("password", user.password)

@@ -4,6 +4,7 @@ import com.projects.genericstructure.core.domain.user.UserEmailAlreadyExistsExce
 import com.projects.genericstructure.core.domain.user.UserRepository
 import com.projects.genericstructure.core.service.CreateUserServiceTestFixture.createUserCommand
 import com.projects.genericstructure.core.service.CreateUserServiceTestFixture.user
+import com.projects.genericstructure.core.service.user.UserService
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -19,7 +20,7 @@ class CreateUserServiceTest : DescribeSpec({
     val userRepository = mockk<UserRepository>()
     val passwordEncoder = mockk<PasswordEncoder>()
 
-    val createUserService = CreateUserService(
+    val createUserService = UserService(
         userRepository = userRepository,
         passwordEncoder = passwordEncoder
     )
@@ -34,7 +35,7 @@ class CreateUserServiceTest : DescribeSpec({
             coEvery { userRepository.findByEmail(any()) } returns user()
 
             val exception = shouldThrow<UserEmailAlreadyExistsException> {
-                createUserService.execute(createUserCommand())
+                createUserService.create(createUserCommand())
             }
 
             exception.email shouldBe createUserCommand().email
@@ -47,7 +48,7 @@ class CreateUserServiceTest : DescribeSpec({
             coEvery { passwordEncoder.encode(any()) } returns "123"
             coJustRun { userRepository.create(any()) }
 
-            createUserService.execute(createUserCommand())
+            createUserService.create(createUserCommand())
 
             coVerify { userRepository.findByEmail(createUserCommand().email) }
             coVerify { passwordEncoder.encode(createUserCommand().password) }
