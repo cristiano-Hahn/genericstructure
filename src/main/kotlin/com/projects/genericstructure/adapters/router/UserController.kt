@@ -19,7 +19,7 @@ class UserController(
     private val createUserService: CreateUserService,
 ) {
 
-    @PostMapping("/create")
+    @PostMapping
     @ResponseStatus(HttpStatus.OK)
     suspend fun createUser(@RequestBody request: CreateUserRequest): CreateUserResponse {
         val userId = UUID.randomUUID()
