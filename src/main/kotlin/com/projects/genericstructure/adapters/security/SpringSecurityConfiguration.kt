@@ -19,12 +19,14 @@ class SpringSecurityConfiguration {
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
+            .httpBasic { }
             .authorizeHttpRequests { authz ->
                 authz
-                    .requestMatchers("/actuator/**", "/users/**").permitAll()
+                    .requestMatchers("/users").permitAll()
+                    .requestMatchers("/users/*/enable").hasAuthority("ROLE_ADMIN")
+                    .requestMatchers("/users/*/disable").hasAuthority("ROLE_ADMIN")
                     .anyRequest().authenticated()
             }
-            .httpBasic { it }
             .exceptionHandling {
                 it
                     .authenticationEntryPoint { _, response, authException ->

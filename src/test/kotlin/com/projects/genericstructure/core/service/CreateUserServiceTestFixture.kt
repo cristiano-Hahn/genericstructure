@@ -7,19 +7,23 @@ import java.util.UUID
 
 object CreateUserServiceTestFixture {
 
-    private const val USER_ID = "e070977b-93e4-4226-b53b-dbda6a36f0b3"
+    val USER_ID = UUID.fromString("e070977b-93e4-4226-b53b-dbda6a36f0b3")
     private const val USER_EMAIL = "user@test.com"
 
-    fun user() = User(
-        id = UUID.fromString(USER_ID),
+    fun userCreated() = User(
+        id = USER_ID,
         email = USER_EMAIL,
         password = "123",
-        enabled = true,
+        enabled = false,
         roles = listOf(Role.USER)
     )
 
+    fun userEnabled() = userCreated().copy(enabled = true)
+
+    fun userDisabled() = userCreated().copy(enabled = false)
+
     fun createUserCommand() = CreateUserCommand(
-        id = UUID.fromString(USER_ID),
+        id = USER_ID,
         email = USER_EMAIL,
         password = "123"
     )

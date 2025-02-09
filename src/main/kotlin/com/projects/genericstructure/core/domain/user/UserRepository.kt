@@ -9,4 +9,6 @@ interface UserRepository {
     suspend fun update(userId: UUID, user: User)
 
     suspend fun findByEmail(email: String): User?
+
+    suspend fun findById(id: UUID): User?
 }

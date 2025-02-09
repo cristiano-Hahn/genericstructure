@@ -6,7 +6,8 @@ import java.util.UUID
 
 object UserR2dbcRepositoryIntegrationTestFixture {
 
-    private const val USER_ID = "e070977b-93e4-4226-b53b-dbda6a36f0b3"
+    const val USER_ID = "e070977b-93e4-4226-b53b-dbda6a36f0b3"
+    const val USER_INVALID_ID = "cd0a3415-5806-46aa-8988-751e3b58ff4e"
     const val USER_EMAIL = "user@test.com"
     const val USER_EMAIL_UPDATED = "updated@test.com"
     const val USER_INVALID_EMAIL = "asdijaod@test.com"

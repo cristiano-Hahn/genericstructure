@@ -13,6 +13,17 @@ object UserR2dbcSqlQueries {
         where email = :email
     """.trimIndent()
 
+    fun findUserById() = """
+        select 
+            id, 
+            email, 
+            password,
+            enabled,
+            roles
+        from "user"
+        where id = :id
+    """.trimIndent()
+
     fun createUser() = """
         INSERT INTO "user" (id, email, password, roles, enabled)
         VALUES (:id, :email, :password, :roles, :enabled);

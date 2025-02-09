@@ -2,7 +2,9 @@ package com.projects.genericstructure.adapters.r2dbc.user
 
 import com.projects.genericstructure.adapters.r2dbc.DatabaseClientFixture.databaseClient
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.USER_EMAIL
+import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.USER_ID
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.USER_INVALID_EMAIL
+import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.USER_INVALID_ID
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.expectedUser
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.sqlMockUser
 import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryIntegrationTestFixture.sqlUnmockUser
@@ -10,6 +12,7 @@ import com.projects.genericstructure.adapters.r2dbc.user.UserR2dbcRepositoryInte
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.r2dbc.core.await
+import java.util.UUID
 
 class UserR2dbcRepositoryIntegrationTest : DescribeSpec({
 
@@ -34,6 +37,19 @@ class UserR2dbcRepositoryIntegrationTest : DescribeSpec({
         it("Should return null because user does not exist") {
             db.sql(sqlMockUser()).await()
             userRepository.findByEmail(USER_INVALID_EMAIL) shouldBe null
+        }
+    }
+
+    describe("Find user by id") {
+
+        it("Should find user by id") {
+            db.sql(sqlMockUser()).await()
+            userRepository.findById(UUID.fromString(USER_ID)) shouldBe expectedUser()
+        }
+
+        it("Should return null because user does not exist") {
+            db.sql(sqlMockUser()).await()
+            userRepository.findById(UUID.fromString(USER_INVALID_ID)) shouldBe null
         }
     }
 
