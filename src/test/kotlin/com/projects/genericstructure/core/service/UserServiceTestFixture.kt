@@ -2,10 +2,10 @@ package com.projects.genericstructure.core.service
 
 import com.projects.genericstructure.core.domain.user.Role
 import com.projects.genericstructure.core.domain.user.User
-import com.projects.genericstructure.core.service.user.CreateUserCommand
+import com.projects.genericstructure.core.service.user.command.CreateUserCommand
 import java.util.UUID
 
-object CreateUserServiceTestFixture {
+object UserServiceTestFixture {
 
     val USER_ID = UUID.fromString("e070977b-93e4-4226-b53b-dbda6a36f0b3")
     private const val USER_EMAIL = "user@test.com"

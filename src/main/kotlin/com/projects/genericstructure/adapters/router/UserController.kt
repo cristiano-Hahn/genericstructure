@@ -1,7 +1,10 @@
 package com.projects.genericstructure.adapters.router
 
+import com.projects.genericstructure.adapters.router.request.AuthenticateUserRequest
+import com.projects.genericstructure.adapters.router.request.AuthenticateUserResponse
 import com.projects.genericstructure.adapters.router.request.CreateUserRequest
 import com.projects.genericstructure.adapters.router.request.CreateUserResponse
+import com.projects.genericstructure.adapters.router.request.toAuthenticateUserResponse
 import com.projects.genericstructure.adapters.router.request.toCommand
 import com.projects.genericstructure.adapters.router.request.toCreateUserResponse
 import com.projects.genericstructure.core.service.user.UserService
@@ -23,21 +26,28 @@ class UserController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    suspend fun createUser(@RequestBody request: CreateUserRequest): CreateUserResponse {
+    suspend fun create(@RequestBody request: CreateUserRequest): CreateUserResponse {
         val userId = UUID.randomUUID()
         val user = userService.create(request.toCommand(userId))
         return user.toCreateUserResponse()
     }
 
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    suspend fun authenticate(@RequestBody request: AuthenticateUserRequest): AuthenticateUserResponse {
+        val jwt = userService.authenticate(request.toCommand())
+        return jwt.toAuthenticateUserResponse()
+    }
+
     @PutMapping("/{userId}/enable")
     @ResponseStatus(HttpStatus.OK)
-    suspend fun enableUser(@PathVariable("userId") userId: UUID) {
+    suspend fun enable(@PathVariable("userId") userId: UUID) {
         userService.enable(userId)
     }
 
     @PutMapping("/{userId}/disable")
     @ResponseStatus(HttpStatus.OK)
-    suspend fun disableUser(@PathVariable("userId") userId: UUID) {
+    suspend fun disable(@PathVariable("userId") userId: UUID) {
         userService.disable(userId)
     }
 }

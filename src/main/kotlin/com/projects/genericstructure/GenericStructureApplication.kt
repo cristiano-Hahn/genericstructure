@@ -1,11 +1,13 @@
 package com.projects.genericstructure
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 
+@ConfigurationPropertiesScan
 @SpringBootApplication
-class GenericstructureApplication
+class GenericStructureApplication
 
 fun main(args: Array<String>) {
-    runApplication<GenericstructureApplication>(*args)
+    runApplication<GenericStructureApplication>(*args)
 }

@@ -1,13 +1,14 @@
 package com.projects.genericstructure.core.service
 
+import com.projects.genericstructure.adapters.security.JwtTokenProvider
 import com.projects.genericstructure.core.domain.user.UserEmailAlreadyExistsException
 import com.projects.genericstructure.core.domain.user.UserNotFoundException
 import com.projects.genericstructure.core.domain.user.UserRepository
-import com.projects.genericstructure.core.service.CreateUserServiceTestFixture.USER_ID
-import com.projects.genericstructure.core.service.CreateUserServiceTestFixture.createUserCommand
-import com.projects.genericstructure.core.service.CreateUserServiceTestFixture.userCreated
-import com.projects.genericstructure.core.service.CreateUserServiceTestFixture.userDisabled
-import com.projects.genericstructure.core.service.CreateUserServiceTestFixture.userEnabled
+import com.projects.genericstructure.core.service.UserServiceTestFixture.USER_ID
+import com.projects.genericstructure.core.service.UserServiceTestFixture.createUserCommand
+import com.projects.genericstructure.core.service.UserServiceTestFixture.userCreated
+import com.projects.genericstructure.core.service.UserServiceTestFixture.userDisabled
+import com.projects.genericstructure.core.service.UserServiceTestFixture.userEnabled
 import com.projects.genericstructure.core.service.user.UserService
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
@@ -17,20 +18,25 @@ import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.crypto.password.PasswordEncoder
 
-class CreateUserServiceTest : DescribeSpec({
+class UserServiceTest : DescribeSpec({
 
     val userRepository = mockk<UserRepository>()
     val passwordEncoder = mockk<PasswordEncoder>()
+    val tokenProvider = mockk<JwtTokenProvider>()
+    val authenticationManager = mockk<ReactiveAuthenticationManager>()
 
     val createUserService = UserService(
         userRepository = userRepository,
-        passwordEncoder = passwordEncoder
+        passwordEncoder = passwordEncoder,
+        tokenProvider = tokenProvider,
+        authenticationManager = authenticationManager,
     )
 
     afterTest {
-        confirmVerified(userRepository, passwordEncoder)
+        confirmVerified(userRepository, passwordEncoder, tokenProvider, authenticationManager)
     }
 
     describe("Create user") {
