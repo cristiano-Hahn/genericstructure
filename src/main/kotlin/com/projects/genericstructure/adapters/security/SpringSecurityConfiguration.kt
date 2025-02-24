@@ -17,6 +17,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository
 import reactor.core.publisher.Mono
 import java.util.Arrays
+import kotlin.jvm.optionals.getOrNull
 
 @Configuration
 class SpringSecurityConfiguration {
@@ -24,7 +25,8 @@ class SpringSecurityConfiguration {
     companion object {
         val ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = Arrays.asList(
             "/users/login",
-            "/users"
+            "/users",
+            "/actuator/health"
         ).toTypedArray()
     }
 
@@ -52,7 +54,7 @@ class SpringSecurityConfiguration {
     fun userDetailsService(users: UserRepository): ReactiveUserDetailsService {
         return ReactiveUserDetailsService { username: String ->
             Mono.defer {
-                mono { users.findByEmail(username) }
+                mono { users.findByEmail(username).getOrNull() }
                     .map { u ->
                         User.withUsername(u.email)
                             .password(u.password)

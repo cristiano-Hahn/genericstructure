@@ -43,22 +43,19 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework:spring-jdbc")
+	implementation("org.postgresql:postgresql")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-	implementation("org.springframework:spring-jdbc")
-	runtimeOnly("org.postgresql:postgresql")
-	implementation("io.r2dbc:r2dbc-pool")
-	implementation("org.postgresql:r2dbc-postgresql")
 	implementation ("io.jsonwebtoken:jjwt-api:$jwtVersion")
 	implementation ("io.jsonwebtoken:jjwt-impl:$jwtVersion")
 	implementation ("io.jsonwebtoken:jjwt-orgjson:$jwtVersion")
 	implementation("io.github.microutils:kotlin-logging:$loggingVersion")
-
 
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
 	testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
@@ -75,6 +72,8 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	annotationProcessor("org.projectlombok:lombok")
 }
 
 kotlin {
