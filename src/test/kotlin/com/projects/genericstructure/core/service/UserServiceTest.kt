@@ -14,12 +14,12 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
-import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.crypto.password.PasswordEncoder
+import java.util.Optional
 
 class UserServiceTest : DescribeSpec({
 
@@ -54,21 +54,21 @@ class UserServiceTest : DescribeSpec({
         }
 
         it("Should create a user") {
-            coEvery { userRepository.findByEmail(any()) } returns null
+            coEvery { userRepository.findByEmail(any()) } returns Optional.empty()
             coEvery { passwordEncoder.encode(any()) } returns "123"
-            coJustRun { userRepository.create(any()) }
+            coEvery { userRepository.save(any()) } returns userCreated().get()
 
             createUserService.create(createUserCommand())
 
             coVerify { userRepository.findByEmail(createUserCommand().email) }
             coVerify { passwordEncoder.encode(createUserCommand().password) }
-            coVerify { userRepository.create(userCreated()) }
+            coVerify { userRepository.save(userCreated().get()) }
         }
     }
 
     describe("Enable user") {
         it("Should throw exception because user does not exists") {
-            coEvery { userRepository.findById(any()) } returns null
+            coEvery { userRepository.findById(any()) } returns Optional.empty()
 
             val exception = shouldThrow<UserNotFoundException> {
                 createUserService.enable(USER_ID)
@@ -81,12 +81,12 @@ class UserServiceTest : DescribeSpec({
 
         it("Should enable a user") {
             coEvery { userRepository.findById(any()) } returns userDisabled()
-            coJustRun { userRepository.update(any(), any()) }
+            coEvery { userRepository.save(any()) } returns userEnabled().get()
 
             createUserService.enable(USER_ID)
 
             coVerify { userRepository.findById(USER_ID) }
-            coVerify { userRepository.update(USER_ID, userEnabled()) }
+            coVerify { userRepository.save(userEnabled().get()) }
         }
 
         it("Should not do anything because user is already enabled") {
@@ -94,13 +94,14 @@ class UserServiceTest : DescribeSpec({
 
             createUserService.enable(USER_ID)
 
+            coVerify { userRepository.save(userEnabled().get()) }
             coVerify { userRepository.findById(USER_ID) }
         }
     }
 
     describe("Disable user") {
         it("Should throw exception because user does not exists") {
-            coEvery { userRepository.findById(any()) } returns null
+            coEvery { userRepository.findById(any()) } returns Optional.empty()
 
             val exception = shouldThrow<UserNotFoundException> {
                 createUserService.disable(USER_ID)
@@ -113,12 +114,12 @@ class UserServiceTest : DescribeSpec({
 
         it("Should enable a user") {
             coEvery { userRepository.findById(any()) } returns userEnabled()
-            coJustRun { userRepository.update(any(), any()) }
+            coEvery { userRepository.save(any()) } returns userDisabled().get()
 
             createUserService.disable(USER_ID)
 
             coVerify { userRepository.findById(USER_ID) }
-            coVerify { userRepository.update(USER_ID, userDisabled()) }
+            coVerify { userRepository.save(userDisabled().get()) }
         }
 
         it("Should not do anything because user is already enabled") {
@@ -126,6 +127,7 @@ class UserServiceTest : DescribeSpec({
 
             createUserService.disable(USER_ID)
 
+            coVerify { userRepository.save(userDisabled().get()) }
             coVerify { userRepository.findById(USER_ID) }
         }
     }

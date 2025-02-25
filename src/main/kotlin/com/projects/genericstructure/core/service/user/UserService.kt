@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.UUID
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class UserService(
@@ -33,7 +34,7 @@ class UserService(
             roles = listOf(Role.USER)
         )
 
-        userRepository.create(user)
+        userRepository.save(user)
 
         return user
     }
@@ -45,30 +46,18 @@ class UserService(
     }
 
     suspend fun enable(userId: UUID) {
-        val user = userRepository.findById(userId) ?: throw UserNotFoundException(userId)
-
-        if (user.enabled) {
-            return
-        }
-
-        val updatedUser = user.copy(enabled = true)
-        userRepository.update(userId, updatedUser)
+        val user = userRepository.findById(userId).getOrNull() ?: throw UserNotFoundException(userId)
+        userRepository.save(user.copy(enabled = true))
     }
 
     suspend fun disable(userId: UUID) {
-        val user = userRepository.findById(userId) ?: throw UserNotFoundException(userId)
-
-        if (!user.enabled) {
-            return
-        }
-
-        val updatedUser = user.copy(enabled = false)
-        userRepository.update(userId, updatedUser)
+        val user = userRepository.findById(userId).getOrNull() ?: throw UserNotFoundException(userId)
+        userRepository.save(user.copy(enabled = false))
     }
 
     private suspend fun validateUserEmailAlreadyExists(email: String) {
         val user = userRepository.findByEmail(email)
-        if (user != null) {
+        if (user.isPresent) {
             throw UserEmailAlreadyExistsException(email)
         }
     }
