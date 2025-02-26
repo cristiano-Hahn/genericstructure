@@ -15,7 +15,60 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"pm.environment.set(\"email\",\"test@gmail.com\")",
+									"pm.environment.set(\"email\",\"test@gmaila.com\")",
+									"pm.environment.set(\"password\", \"password\")",
+									"pm.environment.set(\"phone\", \"111111111111\")",
+									"pm.environment.set(\"company_name\", \"Name test\")",
+									"pm.environment.set(\"company_address\", \"Address test\")",
+									"pm.environment.set(\"company_document_number\", \"11111111111\")",
+									"pm.environment.set(\"company_document_type\", \"CPF\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZXMiOiJVU0VSIiwiZXhwIjoxNzQwNTMyMjE3LCJpYXQiOjE3NDA1Mjg2MTd9.GDRTF7UASO1kEATq76I9TUWAwOx_o80zzcA11EGjULc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\",\n    \"phone\": \"{{phone}}\",\n    \"company\": {\n        \"name\": \"{{company_name}}\",\n        \"address\": \"{{company_address}}\",\n        \"documentNumber\": \"{{company_document_number}}\",\n        \"documentType\": \"{{company_document_type}}\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"email\",\"test@test.com\")",
 									"pm.environment.set(\"password\", \"password\")"
 								],
 								"type": "text/javascript"
@@ -35,12 +88,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/users",
+							"raw": "{{base_url}}/users/login",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"users"
+								"users",
+								"login"
 							]
 						}
 					},
@@ -145,16 +199,11 @@
 					"name": "/health",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
+							"type": "bearer",
+							"bearer": [
 								{
-									"key": "password",
-									"value": "{{password}}",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "{{email}}",
+									"key": "token",
+									"value": "eyJhabGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZXMiOiJBRE1JTiIsImV4cCI6MTc0MDA3NDkzNSwiaWF0IjoxNzQwMDcxMzM1fQ.tXQowvBTutcyn1aXWsn7hXjtMdJ4Uoo6FDU3nyXCpH0",
 									"type": "string"
 								}
 							]
