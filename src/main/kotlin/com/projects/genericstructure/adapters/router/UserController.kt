@@ -26,28 +26,29 @@ class UserController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    suspend fun create(@RequestBody request: CreateUserRequest): CreateUserResponse {
+    fun create(@RequestBody request: CreateUserRequest): CreateUserResponse {
         val userId = UUID.randomUUID()
-        val user = userService.create(request.toCommand(userId))
-        return user.toCreateUserResponse()
+        val companyId = UUID.randomUUID()
+        val commandResult = userService.create(request.toCommand(userId, companyId))
+        return commandResult.toCreateUserResponse()
     }
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    suspend fun authenticate(@RequestBody request: AuthenticateUserRequest): AuthenticateUserResponse {
+    fun authenticate(@RequestBody request: AuthenticateUserRequest): AuthenticateUserResponse {
         val jwt = userService.authenticate(request.toCommand())
         return jwt.toAuthenticateUserResponse()
     }
 
     @PutMapping("/{userId}/enable")
     @ResponseStatus(HttpStatus.OK)
-    suspend fun enable(@PathVariable("userId") userId: UUID) {
+    fun enable(@PathVariable("userId") userId: UUID) {
         userService.enable(userId)
     }
 
     @PutMapping("/{userId}/disable")
     @ResponseStatus(HttpStatus.OK)
-    suspend fun disable(@PathVariable("userId") userId: UUID) {
+    fun disable(@PathVariable("userId") userId: UUID) {
         userService.disable(userId)
     }
 }

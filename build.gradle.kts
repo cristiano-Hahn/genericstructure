@@ -88,6 +88,7 @@ tasks{
 		user = "generic_structure_user"
 		password = "generic_structure_password"
 		schemas = arrayOf("public")
+		cleanDisabled = false
 	}
 }
 

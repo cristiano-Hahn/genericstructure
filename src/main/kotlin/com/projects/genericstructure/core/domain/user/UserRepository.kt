@@ -8,4 +8,6 @@ import java.util.UUID
 @Repository
 interface UserRepository : CrudRepository<User, UUID> {
     fun findByEmail(email: String): Optional<User>
+
+    fun findByPhone(phone: String): Optional<User>
 }
