@@ -12,6 +12,6 @@ class HealthController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    suspend fun health() {
+    fun health() {
     }
 }

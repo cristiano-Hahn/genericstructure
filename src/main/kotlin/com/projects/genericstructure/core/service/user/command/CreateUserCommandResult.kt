@@ -1,14 +1,15 @@
-package com.projects.genericstructure.adapters.router.request
+package com.projects.genericstructure.core.service.user.command
 
+import com.projects.genericstructure.core.domain.company.Company
 import com.projects.genericstructure.core.domain.company.Company.DocumentType
-import com.projects.genericstructure.core.service.user.command.CreateUserCommandResult
-import com.projects.genericstructure.core.service.user.command.CreateUserCommandResult.Company
+import com.projects.genericstructure.core.domain.user.User
 import java.time.Instant
 import java.util.UUID
 
-data class CreateUserResponse(
-    val id: String,
+data class CreateUserCommandResult(
+    val id: UUID,
     val email: String,
+    val password: String,
     val phone: String,
     val company: Company,
     val enabled: Boolean,
@@ -25,15 +26,16 @@ data class CreateUserResponse(
     )
 }
 
-fun CreateUserCommandResult.toCreateUserResponse() = CreateUserResponse(
-    id = this.id.toString(),
+fun User.toCreateUserCommandResult(company: Company) = CreateUserCommandResult(
+    id = this.id!!,
     email = this.email,
+    password = this.password,
     phone = this.phone,
     enabled = this.enabled,
-    roles = this.roles,
+    roles = this.roles.map { it.name }.toSet(),
     createdAt = this.createdAt,
-    company = CreateUserResponse.Company(
-        id = company.id,
+    company = CreateUserCommandResult.Company(
+        id = company.id!!,
         enabled = company.enabled,
         name = company.name,
         address = company.address,

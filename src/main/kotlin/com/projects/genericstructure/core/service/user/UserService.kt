@@ -1,14 +1,17 @@
 package com.projects.genericstructure.core.service.user
 
 import com.projects.genericstructure.adapters.security.JwtTokenProvider
-import com.projects.genericstructure.core.domain.user.Role
-import com.projects.genericstructure.core.domain.user.User
+import com.projects.genericstructure.core.domain.company.CompanyRepository
 import com.projects.genericstructure.core.domain.user.UserEmailAlreadyExistsException
 import com.projects.genericstructure.core.domain.user.UserNotFoundException
+import com.projects.genericstructure.core.domain.user.UserPhoneAlreadyExistsException
 import com.projects.genericstructure.core.domain.user.UserRepository
 import com.projects.genericstructure.core.service.user.command.AuthenticateUserCommand
 import com.projects.genericstructure.core.service.user.command.CreateUserCommand
-import kotlinx.coroutines.reactor.awaitSingle
+import com.projects.genericstructure.core.service.user.command.CreateUserCommandResult
+import com.projects.genericstructure.core.service.user.command.toCompany
+import com.projects.genericstructure.core.service.user.command.toCreateUserCommandResult
+import com.projects.genericstructure.core.service.user.command.toUser
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -19,46 +22,49 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class UserService(
     private val userRepository: UserRepository,
+    private val companyRepository: CompanyRepository,
     private val passwordEncoder: PasswordEncoder,
     private val tokenProvider: JwtTokenProvider,
     private val authenticationManager: ReactiveAuthenticationManager
 ) {
 
-    suspend fun create(command: CreateUserCommand): User {
+    fun create(command: CreateUserCommand): CreateUserCommandResult {
         validateUserEmailAlreadyExists(command.email)
-        val user = User(
-            id = command.id,
-            email = command.email,
-            password = passwordEncoder.encode(command.password),
-            enabled = false,
-            roles = listOf(Role.USER)
-        )
+        validateUserPhoneAlreadyExists(command.phone)
 
-        userRepository.save(user)
+        val company = companyRepository.save(command.toCompany())
+        val user = userRepository.save(command.toUser(company.id!!, passwordEncoder))
 
-        return user
+        return user.toCreateUserCommandResult(company)
     }
 
-    suspend fun authenticate(command: AuthenticateUserCommand): String {
+    fun authenticate(command: AuthenticateUserCommand): String {
         val authenticationToken = UsernamePasswordAuthenticationToken(command.email, command.password)
-        val authentication = authenticationManager.authenticate(authenticationToken).awaitSingle()
+        val authentication = authenticationManager.authenticate(authenticationToken).toFuture().get()
         return tokenProvider.createToken(authentication)
     }
 
-    suspend fun enable(userId: UUID) {
+    fun enable(userId: UUID) {
         val user = userRepository.findById(userId).getOrNull() ?: throw UserNotFoundException(userId)
         userRepository.save(user.copy(enabled = true))
     }
 
-    suspend fun disable(userId: UUID) {
+    fun disable(userId: UUID) {
         val user = userRepository.findById(userId).getOrNull() ?: throw UserNotFoundException(userId)
         userRepository.save(user.copy(enabled = false))
     }
 
-    private suspend fun validateUserEmailAlreadyExists(email: String) {
+    private fun validateUserEmailAlreadyExists(email: String) {
         val user = userRepository.findByEmail(email)
         if (user.isPresent) {
             throw UserEmailAlreadyExistsException(email)
+        }
+    }
+
+    private fun validateUserPhoneAlreadyExists(phone: String) {
+        val user = userRepository.findByPhone(phone)
+        if (user.isPresent) {
+            throw UserPhoneAlreadyExistsException(phone)
         }
     }
 }
