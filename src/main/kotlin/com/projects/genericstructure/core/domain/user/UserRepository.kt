@@ -1,8 +1,13 @@
 package com.projects.genericstructure.core.domain.user
 
-interface UserRepository {
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
+import java.util.Optional
+import java.util.UUID
 
-    suspend fun create(user: User)
+@Repository
+interface UserRepository : CrudRepository<User, UUID> {
+    fun findByEmail(email: String): Optional<User>
 
-    suspend fun findByEmail(email: String): User?
+    fun findByPhone(phone: String): Optional<User>
 }
