@@ -26,7 +26,7 @@ data class CreateUserCommandResult(
     )
 }
 
-fun User.toCreateUserCommandResult(company: Company) = CreateUserCommandResult(
+fun User.toCreateUserCommandResult() = CreateUserCommandResult(
     id = this.id!!,
     email = this.email,
     password = this.password,
@@ -35,11 +35,11 @@ fun User.toCreateUserCommandResult(company: Company) = CreateUserCommandResult(
     roles = this.roles.map { it.name }.toSet(),
     createdAt = this.createdAt,
     company = CreateUserCommandResult.Company(
-        id = company.id!!,
-        enabled = company.enabled,
-        name = company.name,
-        address = company.address,
-        documentNumber = company.documentNumber,
-        documentType = company.documentType,
+        id = this.company.id!!,
+        enabled = this.company.enabled,
+        name = this.company.name,
+        address = this.company.address,
+        documentNumber = this.company.documentNumber,
+        documentType = this.company.documentType
     )
 )

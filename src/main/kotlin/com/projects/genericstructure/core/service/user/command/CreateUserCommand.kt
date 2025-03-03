@@ -4,6 +4,8 @@ import com.projects.genericstructure.core.domain.company.Company
 import com.projects.genericstructure.core.domain.company.Company.DocumentType
 import com.projects.genericstructure.core.domain.user.User
 import org.springframework.security.crypto.password.PasswordEncoder
+import java.time.Clock
+import java.time.Instant
 import java.util.UUID
 
 data class CreateUserCommand(
@@ -22,24 +24,21 @@ data class CreateUserCommand(
     )
 }
 
-fun CreateUserCommand.toCompany() = Company(
-    id = this.company.id,
-    name = this.company.name,
-    enabled = true,
-    address = this.company.address,
-    documentType = this.company.documentType,
-    documentNumber = this.company.documentNumber
-)
-
-fun CreateUserCommand.toUser(
-    companyId: UUID,
-    passwordEncoder: PasswordEncoder
-) = User(
+fun CreateUserCommand.toUser(passwordEncoder: PasswordEncoder, clock: Clock) = User(
     id = this.id,
-    companyId = companyId,
+    company = Company(
+        id = this.company.id,
+        name = this.company.name,
+        enabled = true,
+        address = this.company.address,
+        documentType = this.company.documentType,
+        documentNumber = this.company.documentNumber,
+        createdAt = Instant.now(clock)
+    ),
     email = this.email,
     password = passwordEncoder.encode(this.password),
     enabled = false,
     roles = listOf(User.Role.USER),
-    phone = this.phone
+    phone = this.phone,
+    createdAt = Instant.now(clock)
 )

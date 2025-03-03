@@ -1,7 +1,6 @@
 package com.projects.genericstructure.core.service.user
 
 import com.projects.genericstructure.adapters.security.JwtTokenProvider
-import com.projects.genericstructure.core.domain.company.CompanyRepository
 import com.projects.genericstructure.core.domain.user.UserEmailAlreadyExistsException
 import com.projects.genericstructure.core.domain.user.UserNotFoundException
 import com.projects.genericstructure.core.domain.user.UserPhoneAlreadyExistsException
@@ -9,33 +8,32 @@ import com.projects.genericstructure.core.domain.user.UserRepository
 import com.projects.genericstructure.core.service.user.command.AuthenticateUserCommand
 import com.projects.genericstructure.core.service.user.command.CreateUserCommand
 import com.projects.genericstructure.core.service.user.command.CreateUserCommandResult
-import com.projects.genericstructure.core.service.user.command.toCompany
 import com.projects.genericstructure.core.service.user.command.toCreateUserCommandResult
 import com.projects.genericstructure.core.service.user.command.toUser
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.time.Clock
 import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val companyRepository: CompanyRepository,
     private val passwordEncoder: PasswordEncoder,
     private val tokenProvider: JwtTokenProvider,
-    private val authenticationManager: ReactiveAuthenticationManager
+    private val authenticationManager: ReactiveAuthenticationManager,
+    private val clock: Clock = Clock.systemDefaultZone()
 ) {
 
     fun create(command: CreateUserCommand): CreateUserCommandResult {
         validateUserEmailAlreadyExists(command.email)
         validateUserPhoneAlreadyExists(command.phone)
 
-        val company = companyRepository.save(command.toCompany())
-        val user = userRepository.save(command.toUser(company.id!!, passwordEncoder))
+        val user = userRepository.save(command.toUser(passwordEncoder, clock))
 
-        return user.toCreateUserCommandResult(company)
+        return user.toCreateUserCommandResult()
     }
 
     fun authenticate(command: AuthenticateUserCommand): String {
